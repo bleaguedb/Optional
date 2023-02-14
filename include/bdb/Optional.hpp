@@ -14,11 +14,19 @@ namespace bdb{
   class Optional : private std::optional<T>{
     public:
     using std::optional<T>::optional;
-    using std::optional<T>::operator bool;
-    using std::optional<T>::operator*;
+
     using std::optional<T>::operator=;
+    using std::optional<T>::emplace;
+    using std::optional<T>::swap;
+    using std::optional<T>::reset; 
+
+    using std::optional<T>::operator*;
+    using std::optional<T>::operator->;
+    using std::optional<T>::operator bool;
     using std::optional<T>::has_value;
     using std::optional<T>::value;
+    using std::optional<T>::value_or;
+
 
     //bool constructor
     template<typename BOOL>
@@ -47,6 +55,7 @@ namespace bdb{
     }
     
   };
+  
 
   //compare
   template<typename T>
@@ -74,6 +83,7 @@ namespace bdb{
   inline constexpr auto operator<=>(const Optional<T>& lhs, const T& rhs){
     return lhs ? (*lhs <=> rhs) : std::strong_ordering::less;
   }
+  
   template<typename BOOL>
   inline constexpr bool operator==(const Optional<std::monostate>& lhs,BOOL rhs)
   requires std::same_as<bool,BOOL>{

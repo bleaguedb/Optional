@@ -32,6 +32,4 @@ int main(){
   assert(result4 == false);
   assert(result4 == std::nullopt);
 
-  
-
 }
