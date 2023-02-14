@@ -1,13 +1,8 @@
-
 #include "bdb/Optional.hpp"
 
 #include<cassert>
 
 using bdb::Optional;
-
-// aoao::Optional<> test(){
-//   return true;
-// }
 
 int main(){
   Optional<int> oi = 1;//basic usage
