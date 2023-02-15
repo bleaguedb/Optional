@@ -31,5 +31,4 @@ int main(){
   const auto result4 = maybe_false(false).err_log("result4"); //result4 @ err_log[src/test.cpp:36]
   assert(result4 == false);
   assert(result4 == std::nullopt);
-
 }

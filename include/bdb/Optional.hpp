@@ -27,7 +27,6 @@ namespace bdb{
     using std::optional<T>::value;
     using std::optional<T>::value_or;
 
-
     //bool constructor
     template<typename BOOL>
     Optional(BOOL b) noexcept requires std::same_as<T,std::monostate> && std::same_as<BOOL,bool>{
@@ -55,7 +54,6 @@ namespace bdb{
     }
     
   };
-  
 
   //compare
   template<typename T>
