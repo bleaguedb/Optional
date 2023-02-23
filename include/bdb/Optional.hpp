@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string_view>
+#include <memory>
 #include <variant>//std::monostate
 #include <source_location>
 
@@ -21,22 +22,27 @@ namespace bdb{
     using std::optional<T>::reset; 
 
     using std::optional<T>::operator*;
-    using std::optional<T>::operator->;
+    // using std::optional<T>::operator->;
     using std::optional<T>::operator bool;
     using std::optional<T>::has_value;
     using std::optional<T>::value;
     using std::optional<T>::value_or;
 
-    //bool constructor
+    //bool specialization
     template<typename BOOL>
     Optional(BOOL b) noexcept requires std::same_as<T,std::monostate> && std::same_as<BOOL,bool>{
       if(b) *this = std::monostate{};
       else *this = std::nullopt;
     };
-
     constexpr bool operator*() const& noexcept requires std::same_as<T,std::monostate>{
       return has_value();
     }
+
+    //null-safe member function call
+    auto operator->() noexcept requires std::default_initializable<T> {
+      if(has_value()) return std::make_shared<T>(this->value());
+      else return std::make_shared<T>();
+     }
 
     Optional<T> err_log(std::string_view sv="",std::ostream& os = std::cerr,std::source_location sl = std::source_location::current()) const noexcept{
       if(*this) return *this;
@@ -45,6 +51,10 @@ namespace bdb{
         return std::nullopt;
       }
     }
+
+
+
+
     friend inline std::ostream& operator<<(std::ostream& os,const Optional<T>& opt) noexcept{
       if constexpr(!std::is_same_v<T,std::monostate>){
         if(opt){return os<<opt.value();}else{return os<<"nullopt";};
@@ -93,6 +103,10 @@ namespace bdb{
 
   template<typename T>
   Optional(T) -> Optional<T>;
+
+  //fuctory
+  template<typename T>
+  inline constexpr auto make_optional(T&& t){return Optional(std::forward<T>(t));}
 
 }//ns bdb
 
